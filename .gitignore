@@ -19,3 +19,4 @@ obj/
 *.exe
 *.pdb
 *.cache
+*.lscache
