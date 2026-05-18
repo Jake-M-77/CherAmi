@@ -4,6 +4,8 @@ namespace CherAmi
     {
         private bool _isRunning = true;
 
+        private readonly CommandParser _parser = new CommandParser();
+
         public void Run()
         {
             Console.WriteLine("CherAmi Shell started, type 'exit' to quit");
@@ -15,23 +17,47 @@ namespace CherAmi
 
                 HandleInput(input);
             }
+
+
+
         }
 
         private void HandleInput(string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            ParsedCommand parsed = _parser.Parse(input);
+
+            if (parsed == null)
             {
                 return;
             }
-
-            if (input == "exit")
+            else
             {
-                _isRunning = false;
-                Console.WriteLine("Shutting down CherAmi...");
-                return;
+                switch (parsed.Command)
+                {
+                    case "msg":
+                        if (parsed.Args.Length < 2)
+                        {
+                            Console.WriteLine("USAGE: msg <USER> <MESSAGE>");
+                            return;
+                        }
+
+                        string user = parsed.Args[0];
+                        string text = string.Join(" ", parsed.Args[1..]);
+                        Console.WriteLine($"{parsed.Command}->{user}: {text}");
+                        break;
+
+                    case "exit":
+                        _isRunning = false;
+                        Console.WriteLine("Shutting down CherAmi...");
+                        break;
+
+                    default:
+                        Console.WriteLine($"Unknown command: {input}");
+                        break;
+                }
             }
 
-            Console.WriteLine($"Unknown command: {input}");
+
         }
     }
 }
