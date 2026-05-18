@@ -26,34 +26,37 @@ namespace CherAmi
         {
             ParsedCommand parsed = _parser.Parse(input);
 
-            if (parsed == null) 
+            if (parsed == null)
             {
                 return;
-            }
-
-            if (parsed.Command == "exit")
-            {
-                _isRunning = false;
-                Console.WriteLine("Shutting down CherAmi...");
-                return;
-            }
-            else if (parsed.Command == "msg")
-            {
-                if (parsed.Args.Length < 2)
-                {
-                    Console.WriteLine("USAGE: msg <USER> <MESSAGE>");
-                    return;
-                }
-
-                string user = parsed.Args[0];
-                string text = string.Join(" ", parsed.Args[1..]);
-                
-                Console.WriteLine($"{parsed.Command}->{user}: {text}");
             }
             else
             {
-                Console.WriteLine($"Unknown command: {input}");
+                switch (parsed.Command)
+                {
+                    case "msg":
+                        if (parsed.Args.Length < 2)
+                        {
+                            Console.WriteLine("USAGE: msg <USER> <MESSAGE>");
+                            return;
+                        }
+
+                        string user = parsed.Args[0];
+                        string text = string.Join(" ", parsed.Args[1..]);
+                        Console.WriteLine($"{parsed.Command}->{user}: {text}");
+                        break;
+
+                    case "exit":
+                        _isRunning = false;
+                        Console.WriteLine("Shutting down CherAmi...");
+                        break;
+
+                    default:
+                        Console.WriteLine($"Unknown command: {input}");
+                        break;
+                }
             }
+
 
         }
     }
