@@ -17,20 +17,14 @@ namespace CherAmi
                 switch (parsed.Command)
                 {
                     case "msg":
-                        if (parsed.Args.Length < 2)
-                        {
-                            Console.WriteLine("USAGE: msg <USER> <MESSAGE>");
-                            return true;
-                        }
-
-                        string user = parsed.Args[0];
-                        string text = string.Join(" ", parsed.Args[1..]);
-                        Console.WriteLine($"{parsed.Command}->{user}: {text}");
+                        MsgCommand MsgCommand = new MsgCommand();
+                        MsgCommand.Execute(parsed.Args);
                         return true;
                         break;
 
                     case "exit":
-                        Console.WriteLine("Shutting down CherAmi...");
+                        ExitCommand ExitCommand = new ExitCommand();
+                        ExitCommand.Execute(parsed.Args);
                         return false;
 
                     default:
