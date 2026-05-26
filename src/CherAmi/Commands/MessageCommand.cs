@@ -1,6 +1,8 @@
+using CherAmi;
+
 class MsgCommand : ICommand
 {
-    public void Execute(string[] args)
+    public void Execute(string[] args, ShellContext context)
     {
         if (args.Length < 2)
         {
@@ -11,5 +13,6 @@ class MsgCommand : ICommand
         string user = args[0];
         string text = string.Join(" ", args[1..]);
         Console.WriteLine($"MSG->{user}: {text}");
+
     }
 }

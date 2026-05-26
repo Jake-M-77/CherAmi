@@ -5,35 +5,28 @@ namespace CherAmi
     public class CommandRouter
     {
 
-        public bool Route(ParsedCommand parsed)
-        {
+        readonly Dictionary<string, ICommand> CommandLookup = new Dictionary<string, ICommand>
+            {
+                {"msg", new MsgCommand()},
+                {"exit", new ExitCommand()},
+            };
 
+        public void Route(ParsedCommand parsed, ShellContext context)
+        {
             if (parsed == null)
             {
-                return true;
+                return;
             }
-            else
+
+            ICommand cmd = CommandLookup.GetValueOrDefault(parsed.Command);
+
+            if (cmd == null)
             {
-                switch (parsed.Command)
-                {
-                    case "msg":
-                        MsgCommand MsgCommand = new MsgCommand();
-                        MsgCommand.Execute(parsed.Args);
-                        return true;
-                        break;
-
-                    case "exit":
-                        ExitCommand ExitCommand = new ExitCommand();
-                        ExitCommand.Execute(parsed.Args);
-                        return false;
-
-                    default:
-                        Console.WriteLine($"Unknown command: {parsed.Command}");
-                        return true;
-                        break;
-                }
+                Console.WriteLine("UNKNOWN COMMAND!");
+                return;
             }
 
+            cmd.Execute(parsed.Args, context);
         }
     }
 }

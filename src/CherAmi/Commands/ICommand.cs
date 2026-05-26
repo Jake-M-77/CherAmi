@@ -1,4 +1,6 @@
+using CherAmi;
+
 interface ICommand
 {
-    void Execute(string[] args);
+    void Execute(string[] args, ShellContext context);
 }
