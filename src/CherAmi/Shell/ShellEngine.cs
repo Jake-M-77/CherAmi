@@ -12,22 +12,35 @@ namespace CherAmi
         {
             Console.WriteLine("CherAmi Shell started, type 'exit' to quit");
 
-            while (_isRunning)
+            var context = new ShellContext();
+            context.IsRunning = true;
+
+            while (context.IsRunning)
             {
                 Console.Write("CherAmi@shell> ");
                 string input = Console.ReadLine();
 
-                HandleInput(input);
+                HandleInput(input, context);
             }
 
 
 
         }
 
-        private void HandleInput(string input)
+        private void HandleInput(string input, ShellContext context)
         {
+
+            
+
             ParsedCommand parsed = _parser.Parse(input);
-            _isRunning = _Router.Route(parsed);
+            _Router.Route(parsed, context);
         }
+
+
+    }
+
+    public class ShellContext
+    {
+           public bool IsRunning { get; set; }
     }
 }
