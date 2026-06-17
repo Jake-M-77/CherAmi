@@ -10,9 +10,14 @@ class MsgCommand : ICommand
             return;
         }
 
-        string user = args[0];
-        string text = string.Join(" ", args[1..]);
-        Console.WriteLine($"MSG->{user}: {text}");
+        MessageProcessor messageProcess = new MessageProcessor();
+        MessageDeliverer DeliveryAgent = new MessageDeliverer();
+
+
+        Message msg = messageProcess.ProcessMessage(string.Join(" ", args[1..]));
+
+
+        DeliveryAgent.Display(args[0], msg);
 
     }
 }
