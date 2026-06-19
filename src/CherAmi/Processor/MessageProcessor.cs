@@ -9,7 +9,8 @@ class MessageProcessor
             MessageId = "12345",
             SenderId = "01",
             Content = message,
-            Timestamp = DateTime.UtcNow
+            Timestamp = DateTime.UtcNow,
+            TicksRemaining = 2,
         };
 
 
