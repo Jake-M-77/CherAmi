@@ -41,6 +41,8 @@ namespace CherAmi
 
     public class ShellContext
     {
-           public bool IsRunning { get; set; }
+        public bool IsRunning { get; set; }
+
+        public MessageQueue _messageQueue = new MessageQueue();
     }
 }

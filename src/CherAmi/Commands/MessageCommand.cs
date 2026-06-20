@@ -11,13 +11,13 @@ class MsgCommand : ICommand
         }
 
         MessageProcessor messageProcess = new MessageProcessor();
-        MessageDeliverer DeliveryAgent = new MessageDeliverer();
 
 
         Message msg = messageProcess.ProcessMessage(string.Join(" ", args[1..]));
 
+        context._messageQueue.AddMessage(msg);
 
-        DeliveryAgent.Display(args[0], msg);
+        context._messageQueue.ProcessQueue();
 
     }
 }
