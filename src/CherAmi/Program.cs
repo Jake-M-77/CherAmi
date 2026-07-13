@@ -3,4 +3,4 @@ using CherAmi;
 
 App app = new App();
 
-app.Run();
+await app.Run();

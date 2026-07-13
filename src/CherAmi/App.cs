@@ -1,9 +1,12 @@
+using System.Threading.Tasks;
+using CherAmi.Networking;
+
 namespace CherAmi
 {
     public class App
     {
 
-        public void Run()
+        public async Task Run()
         {
             Console.WriteLine(@"
         ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣫⢟⣿⣿⣿⢿
@@ -26,6 +29,10 @@ namespace CherAmi
             ");
 
             Console.WriteLine("CherAmi starting...");
+
+            var server = new TcpServer("127.0.0.1", 5000);
+
+            await server.StartAsync();
 
             var shell = new ShellEngine();
 
