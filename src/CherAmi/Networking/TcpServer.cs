@@ -15,8 +15,11 @@ public class TcpServer
         _listener = new TcpListener(address, port);
     }
 
-    public async Task StartAsync()
+    public Task StartAsync()
     {
+        _listener.Start();
+
+        return Task.CompletedTask;
 
     }
 
