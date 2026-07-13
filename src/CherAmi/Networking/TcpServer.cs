@@ -21,6 +21,8 @@ public class TcpServer
 
         TcpClient client = await _listener.AcceptTcpClientAsync();
 
+        Console.WriteLine("--=CLIENT CONNECTED=--");
+
         return client;
 
     }
