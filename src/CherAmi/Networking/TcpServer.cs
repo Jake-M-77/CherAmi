@@ -8,6 +8,7 @@ public class TcpServer
 {
 
     private readonly TcpListener _listener;
+    private TcpClient? _client;
 
     public TcpServer(string ipAddress, int port)
     {
@@ -15,21 +16,25 @@ public class TcpServer
         _listener = new TcpListener(address, port);
     }
 
-    public async Task<TcpClient> StartAsync()
+    public async Task StartAsync()
     {
         _listener.Start();
 
-        TcpClient client = await _listener.AcceptTcpClientAsync();
+        _client = await _listener.AcceptTcpClientAsync();
 
+        await HandleClientAsync(_client);
+
+    }
+
+    private async Task HandleClientAsync(TcpClient client)
+    {
         Console.WriteLine("--=CLIENT CONNECTED=--");
-
-        return client;
 
     }
 
     public void Stop()
     {
-        
+
     }
 
 }
