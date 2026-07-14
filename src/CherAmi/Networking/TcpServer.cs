@@ -34,7 +34,14 @@ public class TcpServer
 
     public void Stop()
     {
+        if (_client != null)
+        {
+            _client.Close();
+        }
 
+        _listener.Stop();
+
+        Console.WriteLine("--=SERVER STOPPED=--");
     }
 
 }

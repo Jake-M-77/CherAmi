@@ -37,6 +37,8 @@ namespace CherAmi
             var shell = new ShellEngine();
 
             shell.Run();
+
+            server.Stop();
         }
 
     }
