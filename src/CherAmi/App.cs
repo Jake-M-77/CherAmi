@@ -30,15 +30,43 @@ namespace CherAmi
 
             Console.WriteLine("CherAmi starting...");
 
-            var server = new TcpServer("127.0.0.1", 5000);
+            //TEMPORARY 
 
-            await server.StartAsync();
+            Console.WriteLine("Select mode:");
+            Console.WriteLine("1. Server");
+            Console.WriteLine("2. Client (hit enter to continue as client)");
 
-            var shell = new ShellEngine();
+            Console.Write(">>> ");
+            string x = Console.ReadLine();
 
-            shell.Run();
+            if (x == "1")
+            {
+                var server = new TcpServer("127.0.0.1", 5000);
 
-            server.Stop();
+                await server.StartAsync();
+
+                var shell = new ShellEngine();
+
+                shell.Run();
+
+                server.Stop();
+            }
+            else
+            {
+                var client = new TcpClientConnection("127.0.0.1", 5000);
+
+                await client.ConnectAsync();
+
+                var shell = new ShellEngine();
+
+                shell.Run();
+
+                client.Disconnect();
+            }
+
+            //TEMPORARY
+
+
         }
 
     }
