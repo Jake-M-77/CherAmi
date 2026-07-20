@@ -32,5 +32,6 @@ public class TcpClientConnection
     public void Disconnect()
     {
         _client.Close();
+        Console.WriteLine("--=DISCONNECTED=--");
     }
 }
