@@ -48,6 +48,7 @@ namespace CherAmi
                 var shell = new ShellEngine(server); //
 
                 await shell.Run();
+                
 
                 server.Stop();
             }
@@ -58,6 +59,15 @@ namespace CherAmi
                 await client.ConnectAsync();
 
                 var shell = new ShellEngine(client);
+
+                async Task ReceieveMessages(TcpClientConnection client) {
+                    while (true)
+                    {
+                        Message message = await client.ReceiveMessage();
+                    }
+                }
+
+                Task receiveTask = ReceieveMessages(client);
 
                 await shell.Run();
 
