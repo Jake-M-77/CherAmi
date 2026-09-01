@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
 using CherAmi;
+using CherAmi.Networking;
 
 class MsgCommand : ICommand
 {
-    public void Execute(string[] args, ShellContext context)
+    public async Task Execute(string[] args, ShellContext context)
     {
         if (args.Length < 2)
         {
@@ -12,12 +14,9 @@ class MsgCommand : ICommand
 
         MessageProcessor messageProcess = new MessageProcessor();
 
-
         Message msg = messageProcess.ProcessMessage(string.Join(" ", args[1..]));
 
-        context._messageQueue.AddMessage(msg);
-
-        context._messageQueue.ProcessQueue();
+        await context.tcpClientConnection.SendMessage(msg);
 
     }
 }
