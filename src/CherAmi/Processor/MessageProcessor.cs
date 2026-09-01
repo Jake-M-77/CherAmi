@@ -6,11 +6,10 @@ class MessageProcessor
     {
         Message msg = new Message()
         {
-            MessageId = "12345",
+            MessageId = Guid.NewGuid(),
             SenderId = "01",
             Content = message,
             Timestamp = DateTime.UtcNow,
-            TicksRemaining = 2,
         };
 
 
