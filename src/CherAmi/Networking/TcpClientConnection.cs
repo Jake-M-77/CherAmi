@@ -2,6 +2,7 @@
 
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace CherAmi.Networking;
 
@@ -44,5 +45,12 @@ public class TcpClientConnection
     {
         _client.Close();
         Console.WriteLine("--=DISCONNECTED=--");
+    }
+
+    public async Task SendMessage(Message message)
+    {
+        byte[] serialisedMessage = Serialiser.Serialise(message);
+        byte[] framedData = FrameOutgoingData.FrameData(serialisedMessage);
+        await _streamWrite.WriteOutgoingData(framedData);
     }
 }
