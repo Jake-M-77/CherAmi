@@ -1,3 +1,6 @@
+using System.Threading.Tasks;
+using CherAmi.Networking;
+
 namespace CherAmi
 {
     public class ShellEngine
@@ -8,32 +11,47 @@ namespace CherAmi
 
         private readonly CommandRouter _Router = new CommandRouter();
 
-        public void Run()
+        private TcpClientConnection _tcpClient;
+        private TcpServer _tcpServer;
+
+        public ShellEngine(TcpClientConnection tcpClient)
+        {
+            _tcpClient = tcpClient;
+        }
+
+        public ShellEngine(TcpServer tcpServer)
+        {
+            _tcpServer = tcpServer;
+        }
+
+        public async Task Run()
         {
             Console.WriteLine("CherAmi Shell started, type 'exit' to quit");
 
             var context = new ShellContext();
             context.IsRunning = true;
 
+            context.tcpClientConnection = _tcpClient;
+
             while (context.IsRunning)
             {
                 Console.Write("CherAmi@shell> ");
                 string input = Console.ReadLine();
 
-                HandleInput(input, context);
+                await HandleInput(input, context);
             }
 
 
 
         }
 
-        private void HandleInput(string input, ShellContext context)
+        private async Task HandleInput(string input, ShellContext context)
         {
 
             
 
             ParsedCommand parsed = _parser.Parse(input);
-            _Router.Route(parsed, context);
+            await _Router.Route(parsed, context);
         }
 
 
@@ -43,6 +61,8 @@ namespace CherAmi
     {
         public bool IsRunning { get; set; }
 
-        public MessageQueue _messageQueue = new MessageQueue();
+        public TcpClientConnection tcpClientConnection { get; set; }
+
+        // public MessageQueue _messageQueue = new MessageQueue();
     }
 }

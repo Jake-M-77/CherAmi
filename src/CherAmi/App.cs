@@ -45,9 +45,9 @@ namespace CherAmi
 
                 await server.StartAsync();
 
-                var shell = new ShellEngine();
+                var shell = new ShellEngine(server); //
 
-                shell.Run();
+                await shell.Run();
 
                 server.Stop();
             }
@@ -57,9 +57,9 @@ namespace CherAmi
 
                 await client.ConnectAsync();
 
-                var shell = new ShellEngine();
+                var shell = new ShellEngine(client);
 
-                shell.Run();
+                await shell.Run();
 
                 client.Disconnect();
             }
