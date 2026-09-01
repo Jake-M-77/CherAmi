@@ -53,4 +53,16 @@ public class TcpClientConnection
         byte[] framedData = FrameOutgoingData.FrameData(serialisedMessage);
         await _streamWrite.WriteOutgoingData(framedData);
     }
+
+    public async Task<Message> ReceiveMessage()
+    {
+        byte[] recievedBytes = await _streamRead.ReadIncomingData(4);
+        int messageLength = BitConverter.ToInt32(recievedBytes);
+        byte[] receivedMessage = await _streamRead.ReadIncomingData(messageLength);
+        byte[] unframedData = InterpretIncomingFraming.InterpretFraming(receivedMessage);
+        Message msg = Deserialiser.Deserialise(unframedData);
+
+        return msg;
+    }
+
 }
