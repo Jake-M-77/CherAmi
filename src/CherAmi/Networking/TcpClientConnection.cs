@@ -12,6 +12,12 @@ public class TcpClientConnection
     private readonly string _ipAddress;
     private readonly int _port;
 
+    private NetworkStream _networkStream;
+
+    private Stream.StreamWrite _streamWrite;
+
+    private Stream.StreamRead _streamRead;
+
 
     public TcpClientConnection(string ipAddress, int port)
     {
@@ -27,6 +33,11 @@ public class TcpClientConnection
         await _client.ConnectAsync(address, _port);
 
         Console.WriteLine("--=Connected=--");
+
+        _networkStream = _client.GetStream();
+
+        _streamWrite = new Stream.StreamWrite(_networkStream);
+        _streamRead = new Stream.StreamRead(_networkStream);
     }
 
     public void Disconnect()
