@@ -43,12 +43,7 @@ namespace CherAmi
             {
                 var server = new TcpServer("127.0.0.1", 5000);
 
-                await server.StartAsync();
-
-                var shell = new ShellEngine(server); //
-
-                await shell.Run();
-                
+                await server.RunAsync();
 
                 server.Stop();
             }
@@ -60,10 +55,12 @@ namespace CherAmi
 
                 var shell = new ShellEngine(client);
 
-                async Task ReceieveMessages(TcpClientConnection client) {
+                async Task ReceieveMessages(TcpClientConnection client)
+                {
                     while (true)
                     {
-                        Message message = await client.ReceiveMessage();
+                        Message msg = await client.ReceiveMessage();
+                        Console.WriteLine($"{msg.MessageId}->{msg.SenderId} @ {msg.Timestamp}: {msg.Content}");
                     }
                 }
 

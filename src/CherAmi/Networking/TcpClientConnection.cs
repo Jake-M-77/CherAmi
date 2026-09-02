@@ -28,6 +28,15 @@ public class TcpClientConnection
 
     }
 
+    public TcpClientConnection(TcpClient client)
+    {
+        _client = client;
+        _networkStream = _client.GetStream();
+
+        _streamWrite = new Stream.StreamWrite(_networkStream);
+        _streamRead = new Stream.StreamRead(_networkStream);
+    }
+
     public async Task ConnectAsync()
     {
         IPAddress address = IPAddress.Parse(_ipAddress);
@@ -49,20 +58,37 @@ public class TcpClientConnection
 
     public async Task SendMessage(Message message)
     {
+
         byte[] serialisedMessage = Serialiser.Serialise(message);
+
         byte[] framedData = FrameOutgoingData.FrameData(serialisedMessage);
+
         await _streamWrite.WriteOutgoingData(framedData);
+
     }
 
     public async Task<Message> ReceiveMessage()
     {
-        byte[] recievedBytes = await _streamRead.ReadIncomingData(4);
-        int messageLength = BitConverter.ToInt32(recievedBytes);
-        byte[] receivedMessage = await _streamRead.ReadIncomingData(messageLength);
-        byte[] unframedData = InterpretIncomingFraming.InterpretFraming(receivedMessage);
-        Message msg = Deserialiser.Deserialise(unframedData);
 
-        return msg;
+        byte[] receivedHeader = await _streamRead.ReadIncomingData(4);
+
+        int messageLength = BitConverter.ToInt32(BitConverter.IsLittleEndian ? receivedHeader.Reverse().ToArray() : receivedHeader);
+
+        byte[] receivedMessage = await _streamRead.ReadIncomingData(messageLength);
+
+        byte[] recievedData = new byte[4 + messageLength];
+
+        Buffer.BlockCopy(receivedHeader, 0, recievedData, 0, 4);
+        Buffer.BlockCopy(receivedMessage, 0, recievedData, 4, messageLength);
+
+        byte[] unFramedMessage = InterpretIncomingFraming.InterpretFraming(recievedData);
+
+        Message message = Deserialiser.Deserialise(unFramedMessage);
+
+        return message;
+
+        //Dont, just dont IYKYK
+
     }
 
 }
