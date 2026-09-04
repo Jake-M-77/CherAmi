@@ -12,6 +12,6 @@ public class Message
     string _SenderId;
     string _Content;
 
-    public DateTime Timestamp;
+    public DateTime Timestamp = DateTime.Now;
 
 }
