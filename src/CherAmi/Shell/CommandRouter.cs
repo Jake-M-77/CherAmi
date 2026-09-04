@@ -11,7 +11,7 @@ namespace CherAmi
                 {"exit", new ExitCommand()},
             };
 
-        public void Route(ParsedCommand parsed, ShellContext context)
+        public async Task Route(ParsedCommand parsed, ShellContext context)
         {
             if (parsed == null)
             {
@@ -26,7 +26,7 @@ namespace CherAmi
                 return;
             }
 
-            cmd.Execute(parsed.Args, context);
+            await cmd.Execute(parsed.Args, context);
         }
     }
 }
