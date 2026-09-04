@@ -40,13 +40,14 @@ public class TcpServer
     {
         while (true)
         {
-            Console.WriteLine("Waiting for message...");
 
             Message msg = await client.ReceiveMessage();
 
             Console.WriteLine(
                 $"{msg.MessageId}->{msg.SenderId} @ {msg.Timestamp}: {msg.Content}"
             );
+            Console.Write("CherAmi@Shell> ");
+
         }
     }
 
